@@ -1,10 +1,5 @@
 ﻿using SphereShading.Geometry;
 using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereShading.Models
 {
@@ -14,7 +9,8 @@ namespace SphereShading.Models
         private Triangle[] mesh;
         private int radius, m, n;
 
-        public Vertex[] getVertices() {
+        public Vertex[] getVertices()
+        {
             return vertices;
         }
         public Sphere(int radius, int m, int n)
@@ -24,21 +20,24 @@ namespace SphereShading.Models
             this.n = n;
             this.vertices = new Vertex[m * n + 2];
             //generate points
-            vertices[0] = new Vertex((new Vector(0, radius, 0, 1)), new Vector(0,0,0,0), new Vector(0,0,0,0));
-            for (int i = 0; i < n; ++i) {
-                for (int j = 0; j < m; ++j) {
-                    vertices[i*m + j + 1] = new Vertex (new Vector(
-                        radius * Math.Cos((2 * Math.PI * j) / m)*Math.Sin((i+1)*Math.PI/(n + 1)),
-                        radius*Math.Cos((i+1)* Math.PI / (n + 1)),
-                        radius*Math.Sin(2* Math.PI * j/m)*Math.Sin(Math.PI * (i+1)/(n+1)),
+            vertices[0] = new Vertex((new Vector(0, radius, 0, 1)), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0));
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < m; ++j)
+                {
+                    vertices[i * m + j + 1] = new Vertex(new Vector(
+                        radius * Math.Cos((2 * Math.PI * j) / m) * Math.Sin((i + 1) * Math.PI / (n + 1)),
+                        radius * Math.Cos((i + 1) * Math.PI / (n + 1)),
+                        radius * Math.Sin(2 * Math.PI * j / m) * Math.Sin(Math.PI * (i + 1) / (n + 1)),
                         1
-                        ), new Vector(0,0,0,0), new Vector(0,0,0,0));
+                        ), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0));
                 }
             }
-            vertices[m * n  + 1] = new Vertex(new Vector(0, -radius, 0, 1), new Vector(0,0,0,0), new Vector(0,0,0,0));
+            vertices[m * n + 1] = new Vertex(new Vector(0, -radius, 0, 1), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0));
         }
 
-        public Triangle[] generateMesh(Vertex[] points) {
+        public Triangle[] generateMesh(Vertex[] points)
+        {
             this.mesh = new Triangle[2 * m * n];
             for (int i = 0; i < m - 1; ++i)
             {

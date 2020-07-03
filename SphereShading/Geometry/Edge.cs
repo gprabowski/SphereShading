@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereShading.Geometry
 {
@@ -34,7 +30,8 @@ namespace SphereShading.Geometry
 
         }
 
-        public void reset() {
+        public void reset()
+        {
             P_temp = new Vertex(P0);
         }
 
@@ -46,19 +43,22 @@ namespace SphereShading.Geometry
         public int Ymin { get => ymin; set => ymin = value; }
         internal Vertex P_temp { get => p_temp; set => p_temp = value; }
 
-        public static Boolean operator< (Edge a, Edge b) {
+        public static Boolean operator <(Edge a, Edge b)
+        {
             return a.Xmin < b.Xmin;
         }
 
-        public static Boolean operator> (Edge a, Edge b)
+        public static Boolean operator >(Edge a, Edge b)
         {
             return a.Xmin > b.Xmin;
         }
-        public void makeStep() {
-            Xmin += 1/M;
+        public void makeStep()
+        {
+            Xmin += 1 / M;
         }
 
-        public Vertex getMedP(double t) {
+        public Vertex getMedP(double t)
+        {
             return (P1 - P0) * t + P0;
         }
 

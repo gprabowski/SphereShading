@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SphereShading.Geometry
+﻿namespace SphereShading.Geometry
 {
     class Matrix
     {
@@ -12,8 +6,9 @@ namespace SphereShading.Geometry
 
         public Matrix(Vector v1 = null, Vector v2 = null, Vector v3 = null, Vector v4 = null)
         {
-            if (v1 == v2 && v2 == v3 && v3 == v4 && v4 == null) {
-                vectors = new Vector[4] { new Vector(0,0,0,0), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0) };
+            if (v1 == v2 && v2 == v3 && v3 == v4 && v4 == null)
+            {
+                vectors = new Vector[4] { new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0), new Vector(0, 0, 0, 0) };
             }
             else
                 vectors = new Vector[4] { v1, v2, v3, v4 };
@@ -27,7 +22,7 @@ namespace SphereShading.Geometry
 
         public Vector multiply(Vector vector)
         {
-            Vector result = new Vector(0,0,0,0);
+            Vector result = new Vector(0, 0, 0, 0);
 
             for (int i = 0; i < 4; i++)
             {

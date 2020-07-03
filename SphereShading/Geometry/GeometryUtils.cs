@@ -1,15 +1,12 @@
 ﻿using SphereShading.Geometry;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereShading
 {
     class GeometryUtils
     {
-        public static Matrix getXRotationMatrix(double alpha) {
+        public static Matrix getXRotationMatrix(double alpha)
+        {
             return new Matrix(
                 new Vector(1, 0, 0, 0),
                 new Vector(0, Math.Cos(alpha), -1 * Math.Sin(alpha), 0),
@@ -18,7 +15,8 @@ namespace SphereShading
                 );
         }
 
-        public static Matrix getYRotationMatrix(double alpha) {
+        public static Matrix getYRotationMatrix(double alpha)
+        {
             return new Matrix(
                 new Vector(Math.Cos(alpha), 0, -1 * Math.Sin(alpha), 0),
                 new Vector(0, 1, 0, 0),
@@ -67,7 +65,7 @@ namespace SphereShading
             return new Matrix(
                 new Vector(d, 0, 0, 0),
                 new Vector(0, -d, 0, 0),
-                new Vector(w/2.0, h/2.0, 0, 1),
+                new Vector(w / 2.0, h / 2.0, 0, 1),
                 new Vector(0, 0, 1, 0));
         }
     }

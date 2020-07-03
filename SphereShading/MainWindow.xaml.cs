@@ -1,13 +1,11 @@
-﻿using SphereShading.Models;
-using SphereShading.Geometry;
+﻿using SphereShading.Geometry;
+using SphereShading.Models;
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Controls.Primitives;
-using System.Collections.Generic;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Vector = SphereShading.Geometry.Vector;
 
@@ -17,20 +15,20 @@ namespace SphereShading
     {
         private double lastX;
         private double lastY;
-        private int height = 800;
-        private int width = 1000;
-        private Sphere sphere;
-        private Geometry.Vector light = new Geometry.Vector(0,0,0,0);
+        private readonly int height = 800;
+        private readonly int width = 1000;
+        private readonly Sphere sphere;
+        private Geometry.Vector light = new Geometry.Vector(0, 0, 0, 0);
         private Geometry.Matrix translation;
-        private Vertex[] projectedShape;
-        private double lightI;
-        private Geometry.Vector lightKa;
-        private Geometry.Vector lightKd;
-        private Geometry.Vector lightKs;
+        private readonly Vertex[] projectedShape;
+        private readonly double lightI;
+        private readonly Geometry.Vector lightKa;
+        private readonly Geometry.Vector lightKd;
+        private readonly Geometry.Vector lightKs;
         private Geometry.Vector lightCam;
-        private WriteableBitmap bitmap;
+        private readonly WriteableBitmap bitmap;
         private bool fixedLight = true;
-        private int lightM;
+        private readonly int lightM;
         byte[] pixels;
         public MainWindow()
         {
@@ -54,8 +52,9 @@ namespace SphereShading
         private void displayScene(double v1, double v2)
         {
             pixels = new byte[height * width * 4];
-            for (int i = 0; i < projectedShape.Length; ++i) {
-                sphere.getVertices()[i].P =  GeometryUtils.getProjectionMatrix(1000, 800)
+            for (int i = 0; i < projectedShape.Length; ++i)
+            {
+                sphere.getVertices()[i].P = GeometryUtils.getProjectionMatrix(1000, 800)
                 .multiply(translation)
                 .multiply(GeometryUtils.getXRotationMatrix(v1))
                 .multiply(GeometryUtils.getYRotationMatrix(v2))
@@ -68,8 +67,9 @@ namespace SphereShading
                     .multiply(GeometryUtils.getYRotationMatrix(v2))
                     .multiply(sphere.getVertices()[i].Pg);
             }
-            if(v1 != 0 && v2 != 0) {
-                if(fixedLight)
+            if (v1 != 0 && v2 != 0)
+            {
+                if (fixedLight)
                     light = GeometryUtils.getXRotationMatrix(v1)
                     .multiply(GeometryUtils.getYRotationMatrix(v2))
                      .multiply(light);
@@ -80,8 +80,9 @@ namespace SphereShading
 
 
             var mesh = sphere.generateMesh(sphere.getVertices());
-            foreach (Triangle tri in mesh) {
-                var temp = new Geometry.Vector(tri.P2.P[0] - tri.P1.P[0], tri.P2.P[1] - tri.P1.P[1], 0, 0).crossProduct(new Geometry.Vector(tri.P3.P[0] - tri.P1.P[0], tri.P3.P[1] - tri.P1.P[1],0,0));
+            foreach (Triangle tri in mesh)
+            {
+                var temp = new Geometry.Vector(tri.P2.P[0] - tri.P1.P[0], tri.P2.P[1] - tri.P1.P[1], 0, 0).crossProduct(new Geometry.Vector(tri.P3.P[0] - tri.P1.P[0], tri.P3.P[1] - tri.P1.P[1], 0, 0));
                 if (temp[2] > 0)
                 {
                     drawTriangle(tri);
@@ -89,7 +90,7 @@ namespace SphereShading
             }
 
             Int32Rect rect = new Int32Rect(0, 0, width, height);
-            int stride = 4 * 1000;
+            int stride = 4 * width;
             bitmap.WritePixels(rect, pixels, stride, 0);
             mainImage.Source = bitmap;
         }
@@ -102,7 +103,8 @@ namespace SphereShading
             lightCam[2] = mainSlider.Value;
         }
 
-        private void calculatePhong(Triangle tri) {
+        private void calculatePhong(Triangle tri)
+        {
             tri.P1.Phong = PhongValue(tri.P1);
             tri.P2.Phong = PhongValue(tri.P2);
             tri.P3.Phong = PhongValue(tri.P3);
@@ -115,25 +117,17 @@ namespace SphereShading
             calculatePhong(tri);
             var ET = tri.GetEdgeTable();
             var AET = new List<Edge>();
-            double w;
-            for (int i = 0; i < tri.Y_max - tri.Y_min + 1; ++i) {
-                w = i /(tri.Y_max - tri.Y_min + 1);
+            for (int i = 0; i < tri.Y_max - tri.Y_min + 1; ++i)
+            {
                 AET.AddRange(ET[i]);
-                AET.RemoveAll(s => s.Ymin == tri.Y_max - i);
-                AET.RemoveAll(s => s.Ymax == s.Ymin);
+                AET.RemoveAll(s => s.Ymin == tri.Y_max - i || s.Ymax == s.Ymin);
                 if (AET.Count == 0)
                     continue;
                 AET.Sort();
                 //light magic
-                var start = (int)AET[0].Xmin;
-                var end = (int)AET[1].Xmin + 1;
-
                 Geometry.Vector color;
-                for (int j = start; j <= end; ++j) {
-                    if (start == end) {
-                        setPixel(tri.Y_max - i, j, 0, (AET[0].P0.Phong));
-                        continue;
-                    }
+                for (int j = (int)AET[0].Xmin; j <= (int)AET[1].Xmin + 1; ++j)
+                {
                     var res = cartesian2barycentric(j, tri.Y_max - i, tri.P1.P, tri.P2.P, tri.P3.P);
                     color = tri.P1.Phong.scalarProduct(res[0]) + tri.P2.Phong.scalarProduct(res[1]) + tri.P3.Phong.scalarProduct(res[2]);
                     setPixel(tri.Y_max - i, j, 0, color);
@@ -143,18 +137,20 @@ namespace SphereShading
             }
         }
 
-        private void setPixel(int y, int x, int c, Geometry.Vector col) {
-            if (x >= 0 && x < width && y >= 0 && y < height) {
+        private void setPixel(int y, int x, int c, Geometry.Vector col)
+        {
+            if (x >= 0 && x < width && y >= 0 && y < height)
+            {
                 pixels[y * width * 4 + x * 4 + 0] = (byte)col[2];
                 pixels[y * width * 4 + x * 4 + 1] = (byte)col[1];
                 pixels[y * width * 4 + x * 4 + 2] = (byte)col[0];
                 pixels[y * width * 4 + x * 4 + 3] = 255;
-
             }
         }
 
         private Vector cartesian2barycentric(double x, double y, Geometry.Vector p1, Geometry.Vector p2, Geometry.Vector p3)
         {
+            //TODO do not calculate everything every time, huge waste
             double y2y3 = p2[1] - p3[1],
                 x3x2 = p3[0] - p2[0],
                 x1x3 = p1[0] - p3[0],
@@ -170,20 +166,21 @@ namespace SphereShading
             return new Geometry.Vector(
               lambda1,
               lambda2,
-              1 - lambda1 - lambda2,0 );
+              1 - lambda1 - lambda2, 0);
         }
-        private Geometry.Vector PhongValue(Vertex P) {
+        private Geometry.Vector PhongValue(Vertex P)
+        {
             //light - point light position
             //P.Pg - global coords of point
             //
-            var lcoeff = (light - P.Pg).scalarProduct(1/(light - P.Pg).length());
+            var lcoeff = (light - P.Pg).scalarProduct(1 / (light - P.Pg).length());
             var first = lightKa.scalarProduct(150);
             var second = lightKd.scalarProduct(lightI).scalarProduct(Math.Max(P.Ng.dotProduct(lcoeff), 0));
             var v = (lightCam - P.Pg).scalarProduct(1 / (lightCam - P.Pg).length());
             var r = P.Ng.scalarProduct(P.Ng.dotProduct(lcoeff)) - lcoeff;
             var third = lightKs.scalarProduct(lightI).scalarProduct(Math.Pow(Math.Max(v.dotProduct(r), 0), lightM));
             if ((P.Pg - light).dotProduct(P.Ng) >= 0)
-                third = new Geometry.Vector(0,0,0,0);
+                third = new Geometry.Vector(0, 0, 0, 0);
             return first + second + third;
         }
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
@@ -193,7 +190,7 @@ namespace SphereShading
                 light[1] += 100;
                 displayScene(0, 0);
             }
-            else if(e.Key == Key.S)
+            else if (e.Key == Key.S)
             {
                 light[1] -= 100;
                 displayScene(0, 0);

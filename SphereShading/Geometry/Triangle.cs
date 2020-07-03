@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereShading.Geometry
 {
@@ -24,13 +20,14 @@ namespace SphereShading.Geometry
             Y_min = (int)Math.Min(Math.Min(p1.P[1], p2.P[1]), p3.P[1]);
         }
 
-        public List<Edge>[] GetEdgeTable() {
+        public List<Edge>[] GetEdgeTable()
+        {
             Y_max = (int)Math.Max(Math.Max(p1.P[1], p2.P[1]), p3.P[1]);
             Y_min = (int)Math.Min(Math.Min(p1.P[1], p2.P[1]), p3.P[1]);
             var y_range = Y_max - Y_min;
             var result = new List<Edge>[(int)y_range + 1];
-            for(int i = 0; i < (int)y_range + 1; ++i)
-                    result[i] = new List<Edge>();
+            for (int i = 0; i < (int)y_range + 1; ++i)
+                result[i] = new List<Edge>();
             result[(int)Y_max - (int)Math.Max(p1.P[1], p2.P[1])].Add(new Edge(ref p1, ref p2));
             result[(int)Y_max - (int)Math.Max(p2.P[1], p3.P[1])].Add(new Edge(ref p2, ref p3));
             result[(int)Y_max - (int)Math.Max(p3.P[1], p1.P[1])].Add(new Edge(ref p3, ref p1));

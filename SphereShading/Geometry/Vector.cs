@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SphereShading.Geometry
 {
@@ -20,7 +16,8 @@ namespace SphereShading.Geometry
             vals = new double[4] { v[0], v[1], v[2], v[3] };
         }
 
-        public double this[int key] {
+        public double this[int key]
+        {
             get => vals[key];
             set => vals[key] = value;
         }
@@ -46,7 +43,7 @@ namespace SphereShading.Geometry
 
         public Vector scalarProduct(double n)
         {
-            var result = new Vector(0,0,0,0);
+            var result = new Vector(0, 0, 0, 0);
 
             for (int i = 0; i < 4; i++)
             {
@@ -55,7 +52,8 @@ namespace SphereShading.Geometry
             return result;
         }
 
-        public static Vector operator- (Vector v1, Vector v2) {
+        public static Vector operator -(Vector v1, Vector v2)
+        {
             return new Vector(v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2], v1[3] - v2[3]);
         }
         public static Vector operator +(Vector v1, Vector v2)

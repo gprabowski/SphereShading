@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SphereShading.Geometry
+﻿namespace SphereShading.Geometry
 {
     class Vertex
     {
@@ -25,11 +19,12 @@ namespace SphereShading.Geometry
         }
 
         internal Vector Pg { get => pg; set => pg = value; }
-        internal Vector Ng { get => new Vector(Pg[0]/10, Pg[1]/10, Pg[2]/10, 0);}
+        internal Vector Ng { get => new Vector(Pg[0] / 10, Pg[1] / 10, Pg[2] / 10, 0); }
         internal Vector P { get => p; set => p = value; }
         internal Vector Phong { get => phong; set => phong = value; }
 
-        public static Vertex operator +(Vertex v1, Vertex v2) {
+        public static Vertex operator +(Vertex v1, Vertex v2)
+        {
             return new Vertex(v1.Pg + v2.Pg, v1.Ng + v2.Ng, v1.P + v2.P);
         }
 
