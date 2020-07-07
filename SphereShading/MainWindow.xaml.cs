@@ -67,15 +67,12 @@ namespace SphereShading
                     .multiply(GeometryUtils.getYRotationMatrix(v2))
                     .multiply(sphere.getVertices()[i].Pg);
             }
-            if (v1 != 0 && v2 != 0)
+            if (v1 != 0 || v2 != 0)
             {
                 if (fixedLight)
                     light = GeometryUtils.getXRotationMatrix(v1)
                     .multiply(GeometryUtils.getYRotationMatrix(v2))
                      .multiply(light);
-                lightCam = GeometryUtils.getXRotationMatrix(v1)
-                .multiply(GeometryUtils.getYRotationMatrix(v2))
-                 .multiply(lightCam);
             }
 
 
