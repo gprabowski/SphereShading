@@ -99,8 +99,8 @@ namespace SphereShading
             var t = new Geometry.Vector(0, 0, mainSlider.Value, 1);
             translation = GeometryUtils.getTranslationMatrix(t);
             sphere.getVertices().CopyTo(projectedShape, 0);
+            lightCam[2] = -mainSlider.Value;
             displayScene(0, 0);
-            lightCam[2] = mainSlider.Value;
         }
 
         private void calculatePhong(Triangle tri)
