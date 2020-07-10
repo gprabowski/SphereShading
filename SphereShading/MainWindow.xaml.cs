@@ -15,6 +15,7 @@ namespace SphereShading
     {
         private double lastX;
         private double lastY;
+        private Boolean firstLight = true, secondLight = true, thirdLight = true;
         private readonly int height = 800;
         private readonly int width = 1000;
         private readonly Sphere sphere;
@@ -178,7 +179,9 @@ namespace SphereShading
             var third = lightKs.scalarProduct(lightI).scalarProduct(Math.Pow(Math.Max(v.dotProduct(r), 0), lightM));
             if ((P.Pg - light).dotProduct(P.Ng) >= 0)
                 third = new Geometry.Vector(0, 0, 0, 0);
-            return first + second + third;
+            return (firstLight ? first : new Geometry.Vector(0,0,0,0)) + 
+                (secondLight ? second : new Geometry.Vector(0, 0, 0, 0)) + 
+                (thirdLight ? third : new Geometry.Vector(0, 0, 0, 0));
         }
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
@@ -220,6 +223,21 @@ namespace SphereShading
             else if (e.Key == Key.M)
             {
                 fixedLight = !fixedLight;
+            }
+            else if (e.Key == Key.D1) 
+            {
+                firstLight = !firstLight;
+                displayScene(0, 0);
+            }
+            else if (e.Key == Key.D2)
+            {
+                secondLight = !secondLight;
+                displayScene(0, 0);
+            }
+            else if (e.Key == Key.D3)
+            {
+                thirdLight = !thirdLight;
+                displayScene(0, 0);
             }
 
         }
